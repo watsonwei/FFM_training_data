@@ -20,7 +20,6 @@ then
     two_days_ago=$(date -d '2 days ago' +'%Y%m%d')
     echo ${user_long_hdfs}" file not exist"
     user_long_hdfs="hdfs://dc2/user/mrd/hive/warehouse/userprofile.db/user_profile_long/p_date="${two_days_ago}"/*"
-    exit 2
 fi
 #check if short_term user profile data exists
 user_short_hdfs="hdfs://dc2/user/mrd/push/ltr/rank/"${one_day_ago}"/*/*/*"
