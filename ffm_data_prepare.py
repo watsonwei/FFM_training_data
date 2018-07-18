@@ -97,8 +97,9 @@ newsProfileData= spark_session.textFile(new_profile_hdfs)\
     .map(lambda line:line.strip().split("\t"))\
     .filter(lambda line:is_json(line[8]))\
     .map(lambda line: json.loads(line[8]))\
-    .filter(lambda dic:"oid" in dic.keys() and "catScores" in dic.keys() and "tag" in dic.keys())\
-    .map(lambda line: (line["oid"],(parse_feature(line["catScores"],"cat_news"),parse_feature(line["tag"],"tag_news"),parse_feature(line["topic"],"topic_news"))))
+    .filter(lambda dic:"oid" in dic.keys() and "catScores" in dic.keys() and "tag" in dic.keys() and "topic" in dic.keys())\
+    .map(lambda line: (line["oid"],(parse_feature(line["catScores"],"cat_news"),parse_feature(line["tag"],"tag_news"),parse_feature(line["topic"],"topic_news"))))\
+    .reduceByKey(lambda x,y: x)
 userProfileDataL=spark_session.textFile(user_long_hdfs)\
     .filter(lambda line:line is not None)\
     .map(lambda line:line.strip().split("\t"))\
