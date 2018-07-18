@@ -74,12 +74,14 @@ def parse_feature(feature_fields, key, feature_num_limit=0, feature_rt=False):
         return " ".join(feature_list)
     else:
         return ""
+# directory of push_event data in hdfs
 push_event_hdfs=sys.argv[1]
+# directory of user long-term profile data in hdfs
 user_long_hdfs=sys.argv[2]
+# directory of news profile data in hdfs
 new_profile_hdfs=sys.argv[3]
-rank_hdfs=sys.argv[4]
-now = time.time()
-time_2_hour_ago=time.strftime("%Y%m%d%H", time.localtime(time.mktime(time.localtime(now)) - 2*60 * 60))
+# directory of user short-term profile data in hdfs
+user_short_hdfs=sys.argv[4]
 spark_session = SparkContext()
 pushEventData=spark_session.textFile(push_event_hdfs)\
     .filter(lambda line: line is not None)\
@@ -109,7 +111,7 @@ userProfileDataL=spark_session.textFile(user_long_hdfs)\
     .groupByKey()\
     .filter(lambda l:len(list(l[1]))==3)\
     .map(lambda l:(l[0],(list(l[1])[0],list(l[1])[1],list(l[1])[2])))
-userProfileDataS=spark_session.textFile(rank_hdfs)\
+userProfileDataS=spark_session.textFile(user_short_hdfs)\
     .filter(lambda line:line is not None)\
     .map(lambda line:line.strip().split("\t"))\
     .filter(lambda l: len(l)==13)\
@@ -127,5 +129,5 @@ result=pushEventData.join(newsProfileData)\
          if ul!=None and us!=None else((dateTime,cid,oid,flag,ul[0],ul[1],ul[2],cat_news,tag_news,topic_news) if us==None else
                 (dateTime, cid, oid, flag,cat_news,tag_news,topic_news,us[0],us[1],us[2])) )\
     .map(lambda tuple:" ".join(tuple))
-os.system("hdfs dfs -rm -r hdfs://dc2/user/mrd/push/watson/"+time_2_hour_ago)
-result = result.coalesce(100).saveAsTextFile("hdfs://dc2/user/mrd/push/watson/"+time_2_hour_ago)
+os.system("hdfs dfs -rm -r hdfs://dc2/user/mrd/push/watson/"+sys.argv[5])
+result = result.coalesce(100).saveAsTextFile("hdfs://dc2/user/mrd/push/watson/"+sys.argv[5])

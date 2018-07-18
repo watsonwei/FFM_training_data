@@ -74,9 +74,13 @@ def parse_feature(feature_fields, key, feature_num_limit=0, feature_rt=False):
         return " ".join(feature_list)
     else:
         return ""
+# directory of push_event data in hdfs
 push_event_hdfs=sys.argv[1]
+# directory of user long-term profile data in hdfs
 user_long_hdfs=sys.argv[2]
+# directory of news profile data in hdfs
 new_profile_hdfs=sys.argv[3]
+# directory of user short-term profile data in hdfs
 rank_hdfs=sys.argv[4]
 spark_session = SparkContext()
 pushEventData=spark_session.textFile(push_event_hdfs)\
