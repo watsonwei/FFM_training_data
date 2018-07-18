@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#!/usr/bin/env bash
 #Yi Wei
 #check if push event data exists
 time_hour=$(date -d "$1" +%Y%m%d%H)
@@ -12,7 +11,6 @@ then
     exit 2
 fi
 #check if long_term user profile data exists
-#one_day_ago=$(date -d '1 days ago' +'%Y%m%d')
 one_day_ago=$(date -d "$1 - 1 day")
 one_day_ago=$(date -d "$one_day_ago" +%Y%m%d)
 user_long_hdfs="hdfs://dc2/user/mrd/hive/warehouse/userprofile.db/user_profile_long/p_date="${one_day_ago}"/*"
