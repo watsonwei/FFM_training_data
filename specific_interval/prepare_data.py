@@ -81,7 +81,7 @@ user_long_hdfs=sys.argv[2]
 # directory of news profile data in hdfs
 new_profile_hdfs=sys.argv[3]
 # directory of user short-term profile data in hdfs
-rank_hdfs=sys.argv[4]
+user_short_hdfs=sys.argv[4]
 spark_session = SparkContext()
 pushEventData=spark_session.textFile(push_event_hdfs)\
     .filter(lambda line: line is not None)\
@@ -110,8 +110,9 @@ userProfileDataL=spark_session.textFile(user_long_hdfs)\
     .map(lambda l:(l[0],(parse_feature(json.loads(l[1][1]),l[1][0]))))\
     .groupByKey()\
     .filter(lambda l:len(list(l[1]))==3)\
+    .filter(lambda l:list(l[1])[0]!="" and list(l[1])[1]!="" and list(l[1])[2]!="")\
     .map(lambda l:(l[0],(list(l[1])[0],list(l[1])[1],list(l[1])[2])))
-userProfileDataS=spark_session.textFile(rank_hdfs)\
+userProfileDataS=spark_session.textFile(user_short_hdfs)\
     .filter(lambda line:line is not None)\
     .map(lambda line:line.strip().split("\t"))\
     .filter(lambda l: len(l)==13)\

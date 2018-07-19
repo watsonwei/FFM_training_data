@@ -59,4 +59,4 @@ spark-submit \
     --executor-cores ${EXECUTOR_CORES} \
     --num-executors ${NUM_EXECUTORS}  \
     --executor-memory ${EXECUTOR_MEMORY} \
-    ./ffm_data_prepare.py ${push_event_hdfs} ${user_long_hdfs} ${news_hdfs_14_days} ${user_short_hdfs}
+    ./ffm_data_prepare.py ${push_event_hdfs} ${user_long_hdfs} ${news_hdfs_14_days} ${user_short_hdfs} ${two_hours_ago}
